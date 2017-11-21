@@ -6,13 +6,15 @@ public class Movie {
 	private String director;
 	private String writer;
 	private int rating;
+	private static Movie movieSingleton;
 	
-	public Movie(String title, int releaseYear, String director, String writer, int rating) {
-		this.movieTitle = title;
-		this.releaseYear = releaseYear;
-		this.director = director;
-		this.writer = writer;
-		this.rating = rating;
+	private Movie() {
+	}
+	
+	public static Movie getInstanceOfMovie() {
+		if(movieSingleton == null)
+			movieSingleton = new Movie();
+		return movieSingleton;
 	}
 
 	public String getMovieTitle() {
