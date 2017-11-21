@@ -20,7 +20,9 @@ public class AppMain extends Application {
 
 	public void createMovieView(int viewX, int viewY) throws IOException {
 		Stage stage = new Stage();
-		MovieController controller = new MovieController(new MovieObservable());
+		MovieController controller = new MovieController();
+		MovieObservable movie = new MovieObservable();
+		movie.addObserver(controller);
 		FXMLLoader loader = new FXMLLoader(controller.getClass().getResource("MovieView.fxml"));
 		loader.setController(controller);
 		Parent pane = loader.load();

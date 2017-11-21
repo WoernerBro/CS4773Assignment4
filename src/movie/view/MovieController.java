@@ -12,7 +12,6 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
 import javafx.scene.control.TextField;
-import javafx.scene.input.InputMethodEvent;
 import javafx.fxml.Initializable;
 
 public class MovieController implements Initializable, Observer {
@@ -37,8 +36,8 @@ public class MovieController implements Initializable, Observer {
     @FXML
     private Slider ratingSlider;
 
-    public MovieController(MovieObservable movie) {
-    	this.movie = movie;
+    public MovieController() {
+
     }
 	
 	@Override
@@ -51,10 +50,20 @@ public class MovieController implements Initializable, Observer {
 	        }
 	    });
 	}
+	
+	public void sendChange(MovieObservable movie, Object o) {
+		System.out.println("Send Change: " + o);
+		movie.ChangeMovieStat(this, o);
+	}
+	
+	private void receiveChange(Object o) {
+		System.out.println("Recieve Change: " + o);
+	}
 
 	@Override
-	public void update(Observable arg0, Object arg1) {
-		// TODO Auto-generated method stub
-		
+	public void update(Observable o, Object arg1) {
+		MovieObservable chat = (MovieObservable) o;
+		if(chat.getLastController() != this)
+			receiveChange(chat.getLastChange());
 	}
 }

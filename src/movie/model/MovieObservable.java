@@ -2,12 +2,18 @@ package movie.model;
 
 import java.util.Observable;
 
+import movie.view.MovieController;
+
 public class MovieObservable extends Observable{
 
 	private Movie movie;
+	private Object lastChange;
+	private MovieController lastController;
 	
 	public MovieObservable() {
 		movie = Movie.getInstanceOfMovie();
+		lastChange = null;
+		lastController = null;
 	}
 	
 	public String getMovieTitle() {
@@ -48,5 +54,20 @@ public class MovieObservable extends Observable{
 
 	public void setRating(int rating) {
 		this.movie.setRating(rating);
+	}
+	
+	public void ChangeMovieStat(MovieController controller, Object o) {
+		lastChange = o;
+		lastController = controller;
+		this.setChanged();
+		this.notifyObservers();
+	}
+
+	public Object getLastChange() {
+		return lastChange;
+	}
+
+	public MovieController getLastController() {
+		return lastController;
 	}
 }
