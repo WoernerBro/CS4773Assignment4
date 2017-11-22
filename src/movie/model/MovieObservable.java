@@ -7,12 +7,16 @@ import movie.view.MovieController;
 public class MovieObservable extends Observable{
 
 	private Movie movie;
-	private Object lastChange;
+	private String lastStringChange;
+	private int lastIntegerChange;
+	private String lastChangedStat;
 	private MovieController lastController;
 	
 	public MovieObservable() {
 		movie = Movie.getInstanceOfMovie();
-		lastChange = null;
+		lastStringChange = null;
+		lastIntegerChange = -1;
+		lastChangedStat = null;
 		lastController = null;
 	}
 	
@@ -56,18 +60,35 @@ public class MovieObservable extends Observable{
 		this.movie.setRating(rating);
 	}
 	
-	public void ChangeMovieStat(MovieController controller, Object o) {
-		lastChange = o;
+	public void ChangeMovieString(MovieController controller, String newString, String changedStat) {
+		lastStringChange = newString;
 		lastController = controller;
+		lastChangedStat = changedStat;
 		this.setChanged();
-		this.notifyObservers();
+		this.notifyObservers("STRING");
+	}
+	
+	public void ChangeMovieInteger(MovieController controller, int newInteger, String changedStat) {
+		lastIntegerChange = newInteger;
+		lastController = controller;
+		lastChangedStat = changedStat;
+		this.setChanged();
+		this.notifyObservers("INTEGER");
 	}
 
-	public Object getLastChange() {
-		return lastChange;
+	public String getLastStringChange() {
+		return lastStringChange;
+	}
+	
+	public int getLastIntegerChange() {
+		return lastIntegerChange;
 	}
 
 	public MovieController getLastController() {
 		return lastController;
+	}
+	
+	public String getLastChangedStat() {
+		return lastChangedStat;
 	}
 }

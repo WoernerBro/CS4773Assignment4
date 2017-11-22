@@ -16,8 +16,6 @@ import javafx.fxml.Initializable;
 
 public class MovieController implements Initializable, Observer {
 	
-	private MovieObservable movie;
-	
     @FXML
     private TextField movieTitle;
 
@@ -37,33 +35,73 @@ public class MovieController implements Initializable, Observer {
     private Slider ratingSlider;
 
     public MovieController() {
-
     }
 	
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
+		movieTitle.textProperty().addListener(new ChangeListener<String>() {
+		    @Override
+		    public void changed(ObservableValue<? extends String> arg0, String oldPropertyValue, String newPropertyValue) {
+		    	//Set variable, send signal
+		    	System.out.println("Title changed");
+		    }
+		});
+		director.textProperty().addListener(new ChangeListener<String>() {
+		    @Override
+		    public void changed(ObservableValue<? extends String> arg0, String oldPropertyValue, String newPropertyValue) {
+		    	//Set variable, send signal
+		    	System.out.println("Director changed");
+		    }
+		});
+		releaseYear.textProperty().addListener(new ChangeListener<String>() {
+		    @Override
+		    public void changed(ObservableValue<? extends String> arg0, String oldPropertyValue, String newPropertyValue) {
+		    	//Validate input as integer, set variable, send signal
+		    	System.out.println("Year changed");
+		    }
+		});
+		writer.textProperty().addListener(new ChangeListener<String>() {
+		    @Override
+		    public void changed(ObservableValue<? extends String> arg0, String oldPropertyValue, String newPropertyValue) {
+		    	//Set variable, send signal
+		    	System.out.println("Writer changed");
+		    }
+		});
 		ratingSlider.valueProperty().addListener(new ChangeListener<Object>() {
 	        @Override
 	        public void changed(ObservableValue<?> arg0, Object arg1, Object arg2) {
-	        	ratingText.textProperty().setValue(
-	                    String.valueOf((int) ratingSlider.getValue()));
+	        	ratingText.textProperty().setValue(String.valueOf((int) ratingSlider.getValue()));
+	        	//Set variable, send signal
 	        }
 	    });
 	}
 	
-	public void sendChange(MovieObservable movie, Object o) {
-		System.out.println("Send Change: " + o);
-		movie.ChangeMovieStat(this, o);
+	public void sendStringChange(MovieObservable movie, String newString, String changedStat) {
+		System.out.println("Send Change: " + newString);
+		movie.ChangeMovieString(this, newString, changedStat);
 	}
 	
-	private void receiveChange(Object o) {
-		System.out.println("Recieve Change: " + o);
+	public void sendIntegerChange(MovieObservable movie, int newInteger, String changedStat) {
+		System.out.println("Send Change: " + newInteger);
+		movie.ChangeMovieInteger(this, newInteger, changedStat);
+	}
+	
+	private void receiveStringChange(String newString) {
+		System.out.println("Recieve Change: " + newString);
+	}
+	
+	private void receiveIntegerChange(int newInteger) {
+		System.out.println("Recieve Change: " + newInteger);
 	}
 
 	@Override
-	public void update(Observable o, Object arg1) {
-		MovieObservable chat = (MovieObservable) o;
-		if(chat.getLastController() != this)
-			receiveChange(chat.getLastChange());
+	public void update(Observable o, Object changeType) {
+		MovieObservable movie = (MovieObservable) o;
+		if(movie.getLastController() != this) {
+			if (String.valueOf(changeType).equals("STRING"))
+				receiveStringChange(movie.getLastStringChange());
+			if (String.valueOf(changeType).equals("INTEGER"))
+				receiveIntegerChange(movie.getLastIntegerChange());
+		}
 	}
 }
