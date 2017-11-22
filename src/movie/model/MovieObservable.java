@@ -61,6 +61,7 @@ public class MovieObservable extends Observable{
 	}
 	
 	public void ChangeMovieString(MovieController controller, String newString, String changedStat) {
+		System.out.println("Making Change: " + lastStringChange + " " + lastChangedStat);
 		lastStringChange = newString;
 		lastController = controller;
 		lastChangedStat = changedStat;
@@ -69,6 +70,7 @@ public class MovieObservable extends Observable{
 	}
 	
 	public void ChangeMovieInteger(MovieController controller, int newInteger, String changedStat) {
+		System.out.println("Making Change: " + lastIntegerChange + " " + lastChangedStat);
 		lastIntegerChange = newInteger;
 		lastController = controller;
 		lastChangedStat = changedStat;

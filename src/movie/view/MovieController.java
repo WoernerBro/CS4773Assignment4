@@ -16,6 +16,8 @@ import javafx.fxml.Initializable;
 
 public class MovieController implements Initializable, Observer {
 	
+	private MovieObservable movie;
+	
     @FXML
     private TextField movieTitle;
 
@@ -34,7 +36,8 @@ public class MovieController implements Initializable, Observer {
     @FXML
     private Slider ratingSlider;
 
-    public MovieController() {
+    public MovieController(MovieObservable movie) {
+    	this.movie = movie;
     }
 	
 	@Override
@@ -42,29 +45,25 @@ public class MovieController implements Initializable, Observer {
 		movieTitle.textProperty().addListener(new ChangeListener<String>() {
 		    @Override
 		    public void changed(ObservableValue<? extends String> arg0, String oldPropertyValue, String newPropertyValue) {
-		    	//Set variable, send signal
-		    	System.out.println("Title changed");
+		    	sendStringChange(movie, movieTitle.getText(), "title");
 		    }
 		});
 		director.textProperty().addListener(new ChangeListener<String>() {
 		    @Override
 		    public void changed(ObservableValue<? extends String> arg0, String oldPropertyValue, String newPropertyValue) {
 		    	//Set variable, send signal
-		    	System.out.println("Director changed");
 		    }
 		});
 		releaseYear.textProperty().addListener(new ChangeListener<String>() {
 		    @Override
 		    public void changed(ObservableValue<? extends String> arg0, String oldPropertyValue, String newPropertyValue) {
 		    	//Validate input as integer, set variable, send signal
-		    	System.out.println("Year changed");
 		    }
 		});
 		writer.textProperty().addListener(new ChangeListener<String>() {
 		    @Override
 		    public void changed(ObservableValue<? extends String> arg0, String oldPropertyValue, String newPropertyValue) {
 		    	//Set variable, send signal
-		    	System.out.println("Writer changed");
 		    }
 		});
 		ratingSlider.valueProperty().addListener(new ChangeListener<Object>() {
