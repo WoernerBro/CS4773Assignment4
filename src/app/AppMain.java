@@ -11,16 +11,19 @@ import movie.model.MovieObservable;
 import movie.view.MovieController;
 
 public class AppMain extends Application {
+	
+	private static MovieObservable movie;
+	
 	public AppMain() {
 	}
 	
 	public static void main(String[] args) {
+		movie = new MovieObservable();
 		launch(args);
 	}
 
 	public void createMovieView(int viewX, int viewY) throws IOException {
 		Stage stage = new Stage();
-		MovieObservable movie = new MovieObservable();
 		MovieController controller = new MovieController(movie);
 		movie.addObserver(controller);
 		FXMLLoader loader = new FXMLLoader(controller.getClass().getResource("MovieView.fxml"));

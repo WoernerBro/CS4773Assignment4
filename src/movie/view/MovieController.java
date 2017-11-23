@@ -45,62 +45,68 @@ public class MovieController implements Initializable, Observer {
 		movieTitle.textProperty().addListener(new ChangeListener<String>() {
 		    @Override
 		    public void changed(ObservableValue<? extends String> arg0, String oldPropertyValue, String newPropertyValue) {
-		    	sendStringChange(movie, movieTitle.getText(), "title");
+		    	sendChange(movie, movieTitle.getText(), "TITLE");
 		    }
 		});
 		director.textProperty().addListener(new ChangeListener<String>() {
 		    @Override
 		    public void changed(ObservableValue<? extends String> arg0, String oldPropertyValue, String newPropertyValue) {
-		    	//Set variable, send signal
+		    	sendChange(movie, director.getText(), "DIRECTOR");
 		    }
 		});
 		releaseYear.textProperty().addListener(new ChangeListener<String>() {
 		    @Override
 		    public void changed(ObservableValue<? extends String> arg0, String oldPropertyValue, String newPropertyValue) {
-		    	//Validate input as integer, set variable, send signal
+		    	if (!newPropertyValue.matches("\\d*")) {
+		    		releaseYear.setText(oldPropertyValue);
+		    	} else {
+		    		if (releaseYear.getText().equals(""))
+		    			sendChange(movie, "-1", "YEAR");
+		    		else
+		    			sendChange(movie, releaseYear.getText(), "YEAR");
+		    	}
 		    }
 		});
 		writer.textProperty().addListener(new ChangeListener<String>() {
 		    @Override
 		    public void changed(ObservableValue<? extends String> arg0, String oldPropertyValue, String newPropertyValue) {
-		    	//Set variable, send signal
+		    	sendChange(movie, writer.getText(), "WRITER");
 		    }
 		});
 		ratingSlider.valueProperty().addListener(new ChangeListener<Object>() {
 	        @Override
 	        public void changed(ObservableValue<?> arg0, Object arg1, Object arg2) {
 	        	ratingText.textProperty().setValue(String.valueOf((int) ratingSlider.getValue()));
-	        	//Set variable, send signal
+	        	sendChange(movie, ratingText.getText(), "RATING");
 	        }
 	    });
 	}
 	
-	public void sendStringChange(MovieObservable movie, String newString, String changedStat) {
-		System.out.println("Send Change: " + newString);
-		movie.ChangeMovieString(this, newString, changedStat);
+	public void sendChange(MovieObservable movie, String newStat, String changedStat) {
+		movie.ChangeMovieString(this, newStat, changedStat);
 	}
 	
-	public void sendIntegerChange(MovieObservable movie, int newInteger, String changedStat) {
-		System.out.println("Send Change: " + newInteger);
-		movie.ChangeMovieInteger(this, newInteger, changedStat);
-	}
-	
-	private void receiveStringChange(String newString) {
-		System.out.println("Recieve Change: " + newString);
-	}
-	
-	private void receiveIntegerChange(int newInteger) {
-		System.out.println("Recieve Change: " + newInteger);
+	private void receiveChange(String newStat, String changedStat) {
+		if (changedStat.equals("TITLE"))
+			movieTitle.setText(newStat);
+		else if (changedStat.equals("DIRECTOR"))
+			director.setText(newStat);
+		else if (changedStat.equals("YEAR")) {
+			if (newStat.equals("-1"))
+				releaseYear.setText("");
+			else
+				releaseYear.setText(newStat);
+		}
+		else if (changedStat.equals("WRITER"))
+			writer.setText(newStat);
+		else if (changedStat.equals("RATING"))
+			ratingSlider.setValue(Integer.valueOf(newStat));
 	}
 
 	@Override
-	public void update(Observable o, Object changeType) {
+	public void update(Observable o, Object obj) {
 		MovieObservable movie = (MovieObservable) o;
-		if(movie.getLastController() != this) {
-			if (String.valueOf(changeType).equals("STRING"))
-				receiveStringChange(movie.getLastStringChange());
-			if (String.valueOf(changeType).equals("INTEGER"))
-				receiveIntegerChange(movie.getLastIntegerChange());
-		}
+		if(movie.getLastController() != this)
+			receiveChange(movie.getLastStatChange(), movie.getLastChangedStat());
 	}
 }

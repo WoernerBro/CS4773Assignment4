@@ -7,15 +7,13 @@ import movie.view.MovieController;
 public class MovieObservable extends Observable{
 
 	private Movie movie;
-	private String lastStringChange;
-	private int lastIntegerChange;
+	private String lastStatChange;
 	private String lastChangedStat;
 	private MovieController lastController;
 	
 	public MovieObservable() {
 		movie = Movie.getInstanceOfMovie();
-		lastStringChange = null;
-		lastIntegerChange = -1;
+		lastStatChange = null;
 		lastChangedStat = null;
 		lastController = null;
 	}
@@ -60,30 +58,26 @@ public class MovieObservable extends Observable{
 		this.movie.setRating(rating);
 	}
 	
-	public void ChangeMovieString(MovieController controller, String newString, String changedStat) {
-		System.out.println("Making Change: " + lastStringChange + " " + lastChangedStat);
-		lastStringChange = newString;
+	public void ChangeMovieString(MovieController controller, String newStat, String changedStat) {
+		lastStatChange = newStat;
 		lastController = controller;
 		lastChangedStat = changedStat;
+		if (changedStat.equals("TITLE"))
+			setMovieTitle(newStat);
+		else if (changedStat.equals("DIRECTOR"))
+			setDirector(newStat);
+		else if (changedStat.equals("YEAR"))
+			setReleaseYear(Integer.valueOf(newStat));
+		else if (changedStat.equals("WRITER"))
+			setWriter(newStat);
+		else if (changedStat.equals("RATING"))
+			setRating(Integer.valueOf(newStat));
 		this.setChanged();
-		this.notifyObservers("STRING");
-	}
-	
-	public void ChangeMovieInteger(MovieController controller, int newInteger, String changedStat) {
-		System.out.println("Making Change: " + lastIntegerChange + " " + lastChangedStat);
-		lastIntegerChange = newInteger;
-		lastController = controller;
-		lastChangedStat = changedStat;
-		this.setChanged();
-		this.notifyObservers("INTEGER");
+		this.notifyObservers();
 	}
 
-	public String getLastStringChange() {
-		return lastStringChange;
-	}
-	
-	public int getLastIntegerChange() {
-		return lastIntegerChange;
+	public String getLastStatChange() {
+		return lastStatChange;
 	}
 
 	public MovieController getLastController() {
