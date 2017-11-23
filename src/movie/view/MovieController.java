@@ -48,12 +48,14 @@ public class MovieController implements Initializable, Observer {
 		    	sendChange(movie, movieTitle.getText(), "TITLE");
 		    }
 		});
+		
 		director.textProperty().addListener(new ChangeListener<String>() {
 		    @Override
 		    public void changed(ObservableValue<? extends String> arg0, String oldPropertyValue, String newPropertyValue) {
 		    	sendChange(movie, director.getText(), "DIRECTOR");
 		    }
 		});
+		
 		releaseYear.textProperty().addListener(new ChangeListener<String>() {
 		    @Override
 		    public void changed(ObservableValue<? extends String> arg0, String oldPropertyValue, String newPropertyValue) {
@@ -67,12 +69,14 @@ public class MovieController implements Initializable, Observer {
 		    	}
 		    }
 		});
+		
 		writer.textProperty().addListener(new ChangeListener<String>() {
 		    @Override
 		    public void changed(ObservableValue<? extends String> arg0, String oldPropertyValue, String newPropertyValue) {
 		    	sendChange(movie, writer.getText(), "WRITER");
 		    }
 		});
+		
 		ratingSlider.valueProperty().addListener(new ChangeListener<Object>() {
 	        @Override
 	        public void changed(ObservableValue<?> arg0, Object arg1, Object arg2) {
@@ -92,10 +96,12 @@ public class MovieController implements Initializable, Observer {
 		else if (changedStat.equals("DIRECTOR"))
 			director.setText(newStat);
 		else if (changedStat.equals("YEAR")) {
-			if (newStat.equals("-1"))
-				releaseYear.setText("");
-			else
-				releaseYear.setText(newStat);
+			setYear(newStat);
+			
+			//if (newStat.equals("-1"))
+			//	releaseYear.setText("");
+			//else
+		//		releaseYear.setText(newStat);
 		}
 		else if (changedStat.equals("WRITER"))
 			writer.setText(newStat);
@@ -103,9 +109,16 @@ public class MovieController implements Initializable, Observer {
 			ratingSlider.setValue(Integer.valueOf(newStat));
 	}
 
+	public void setYear(String newStat) {
+		if (newStat.equals("-1"))
+			releaseYear.setText("");
+		else
+			releaseYear.setText(newStat);
+	}
+	
 	@Override
-	public void update(Observable o, Object obj) {
-		MovieObservable movie = (MovieObservable) o;
+	public void update(Observable observer, Object changedItem) {
+		MovieObservable movie = (MovieObservable) observer;
 		if(movie.getLastController() != this)
 			receiveChange(movie.getLastStatChange(), movie.getLastChangedStat());
 	}
