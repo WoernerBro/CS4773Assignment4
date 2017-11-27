@@ -1,9 +1,9 @@
-This assignment took me/us __ hours
+This assignment took me/us 13 hours
 
 List team member names below. If not team member names, grader will assume solo work.
 
 # HOURS		NAME
-6			Sean Woerner
-			Lucas Tiedeman
-1			William Brandon Fisher
-			Christian Andrada
+5			Sean Woerner
+3			Lucas Tiedeman
+3			William Brandon Fisher
+2			Christian Andrada

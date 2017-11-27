@@ -44,43 +44,35 @@ public class MovieController implements Initializable, Observer {
 	public void initialize(URL location, ResourceBundle resources) {
 		movieTitle.textProperty().addListener(new ChangeListener<String>() {
 		    @Override
-		    public void changed(ObservableValue<? extends String> arg0, String oldPropertyValue, String newPropertyValue) {
+		    public void changed(ObservableValue<? extends String> movieStat, String oldPropertyValue, String newPropertyValue) {
 		    	sendChange(movie, movieTitle.getText(), "TITLE");
 		    }
 		});
 		
 		director.textProperty().addListener(new ChangeListener<String>() {
 		    @Override
-		    public void changed(ObservableValue<? extends String> arg0, String oldPropertyValue, String newPropertyValue) {
+		    public void changed(ObservableValue<? extends String> movieStat, String oldPropertyValue, String newPropertyValue) {
 		    	sendChange(movie, director.getText(), "DIRECTOR");
 		    }
 		});
 		
 		releaseYear.textProperty().addListener(new ChangeListener<String>() {
 		    @Override
-		    public void changed(ObservableValue<? extends String> arg0, String oldPropertyValue, String newPropertyValue) {
+		    public void changed(ObservableValue<? extends String> movieStat, String oldPropertyValue, String newPropertyValue) {
 		    	handleChanged(oldPropertyValue, newPropertyValue);
-		    	/**if (!newPropertyValue.matches("\\d*")) {
-		    		releaseYear.setText(oldPropertyValue);
-		    	} else {
-		    		if (releaseYear.getText().equals(""))
-		    			sendChange(movie, "-1", "YEAR");
-		    		else
-		    			sendChange(movie, releaseYear.getText(), "YEAR");
-		    	}**/
 		    }
 		});
 		
 		writer.textProperty().addListener(new ChangeListener<String>() {
 		    @Override
-		    public void changed(ObservableValue<? extends String> arg0, String oldPropertyValue, String newPropertyValue) {
+		    public void changed(ObservableValue<? extends String> movieStat, String oldPropertyValue, String newPropertyValue) {
 		    	sendChange(movie, writer.getText(), "WRITER");
 		    }
 		});
 		
 		ratingSlider.valueProperty().addListener(new ChangeListener<Object>() {
 	        @Override
-	        public void changed(ObservableValue<?> arg0, Object arg1, Object arg2) {
+	        public void changed(ObservableValue<?> movieStat, Object oldPropertyValue, Object newPropertyValue) {
 	        	ratingText.textProperty().setValue(String.valueOf((int) ratingSlider.getValue()));
 	        	sendChange(movie, ratingText.getText(), "RATING");
 	        }
@@ -96,14 +88,8 @@ public class MovieController implements Initializable, Observer {
 			movieTitle.setText(newStat);
 		else if (changedStat.equals("DIRECTOR"))
 			director.setText(newStat);
-		else if (changedStat.equals("YEAR")) {
+		else if (changedStat.equals("YEAR"))
 			setYear(newStat);
-			
-			//if (newStat.equals("-1"))
-			//	releaseYear.setText("");
-			//else
-		//		releaseYear.setText(newStat);
-		}
 		else if (changedStat.equals("WRITER"))
 			writer.setText(newStat);
 		else if (changedStat.equals("RATING"))
