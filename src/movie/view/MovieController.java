@@ -59,14 +59,15 @@ public class MovieController implements Initializable, Observer {
 		releaseYear.textProperty().addListener(new ChangeListener<String>() {
 		    @Override
 		    public void changed(ObservableValue<? extends String> arg0, String oldPropertyValue, String newPropertyValue) {
-		    	if (!newPropertyValue.matches("\\d*")) {
+		    	handleChanged(oldPropertyValue, newPropertyValue);
+		    	/**if (!newPropertyValue.matches("\\d*")) {
 		    		releaseYear.setText(oldPropertyValue);
 		    	} else {
 		    		if (releaseYear.getText().equals(""))
 		    			sendChange(movie, "-1", "YEAR");
 		    		else
 		    			sendChange(movie, releaseYear.getText(), "YEAR");
-		    	}
+		    	}**/
 		    }
 		});
 		
@@ -114,6 +115,17 @@ public class MovieController implements Initializable, Observer {
 			releaseYear.setText("");
 		else
 			releaseYear.setText(newStat);
+	}
+	
+	public void handleChanged( String oldPropertyValue, String newPropertyValue) {
+		if (!newPropertyValue.matches("\\d*")) {
+    		releaseYear.setText(oldPropertyValue);
+    	} else {
+    		if (releaseYear.getText().equals(""))
+    			sendChange(movie, "-1", "YEAR");
+    		else
+    			sendChange(movie, releaseYear.getText(), "YEAR");
+    	}
 	}
 	
 	@Override
