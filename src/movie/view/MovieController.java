@@ -6,7 +6,8 @@ import java.util.Observer;
 import java.util.ResourceBundle;
 
 import movie.model.MovieObservable;
-import movie.model.MovieListeners;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
@@ -41,11 +42,57 @@ public class MovieController implements Initializable, Observer {
 	
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
-		MovieListeners.setTitleListener();
-		MovieListeners.setDirectorListener();
-		MovieListeners.setYearListener();
-		MovieListeners.setWriterListener();
-		MovieListeners.setRatingListener();
+		setTitleListener();
+		setDirectorListener();
+		setYearListener();
+		setWriterListener();
+		setRatingListener();
+	}
+	
+	public void setTitleListener() {
+		movieTitle.textProperty().addListener(new ChangeListener<String>() {
+		    @Override
+		    public void changed(ObservableValue<? extends String> movieStat, String oldPropertyValue, String newPropertyValue) {
+		    	sendChange(movie, movieTitle.getText(), "TITLE");
+		    }
+		});
+	}
+	
+	public void setDirectorListener() {
+		director.textProperty().addListener(new ChangeListener<String>() {
+		    @Override
+		    public void changed(ObservableValue<? extends String> movieStat, String oldPropertyValue, String newPropertyValue) {
+		    	sendChange(movie, director.getText(), "DIRECTOR");
+		    }
+		});
+	}
+	
+	public void setYearListener() {
+		releaseYear.textProperty().addListener(new ChangeListener<String>() {
+		    @Override
+		    public void changed(ObservableValue<? extends String> movieStat, String oldPropertyValue, String newPropertyValue) {
+		    	handleChanged(oldPropertyValue, newPropertyValue);
+		    }
+		});
+	}
+	
+	public void setWriterListener() {
+		writer.textProperty().addListener(new ChangeListener<String>() {
+		    @Override
+		    public void changed(ObservableValue<? extends String> movieStat, String oldPropertyValue, String newPropertyValue) {
+		    	sendChange(movie, writer.getText(), "WRITER");
+		    }
+		});
+	}
+	
+	public void setRatingListener() {
+		ratingSlider.valueProperty().addListener(new ChangeListener<Object>() {
+	        @Override
+	        public void changed(ObservableValue<?> movieStat, Object oldPropertyValue, Object newPropertyValue) {
+	        	ratingText.textProperty().setValue(String.valueOf((int) ratingSlider.getValue()));
+	        	sendChange(movie, ratingText.getText(), "RATING");
+	        }
+	    });
 	}
 	
 	public void sendChange(MovieObservable movie, String newStat, String changedStat) {
